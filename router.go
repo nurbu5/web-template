@@ -1,15 +1,15 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/nurbu5/web-template/internal/controllers"
+)
 
 func configRoutes() *http.ServeMux {
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", homeHandler)
+	mux.HandleFunc("/", controllers.Root)
 
 	return mux
-}
-
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
 }
