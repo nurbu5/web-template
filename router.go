@@ -13,4 +13,3 @@ func configRoutes() *http.ServeMux {
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Hello, World!"))
 }
-
