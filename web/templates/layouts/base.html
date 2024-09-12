@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>{{ template "title" . }}</title>
+</head>
+
+<body>
+  {{ template "body" . }}
+
+  {{ if .Test }}
+  <p>This is just a {{ .Test }} page!</p>
+  {{ end }}
+</body>
+
+</html>
