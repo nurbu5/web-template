@@ -2,18 +2,14 @@ package views
 
 import (
 	"html/template"
-	"path/filepath"
+	"io/fs"
 )
 
-const LayoutDirectory = "./web/templates/layouts"
 const TemplateDirectory = "./web/templates"
 
 // ConfigViews parses the layout files.
-func ConfigViews() *template.Template {
-	files, err := filepath.Glob(LayoutDirectory + "/*")
-	if err != nil {
-		panic(err)
-	}
-
-	return template.Must(template.ParseFiles(files...))
+func ConfigViews(templateFS fs.FS) *template.Template {
+	return template.Must(
+		template.ParseFS(templateFS, "web/templates/layouts/*.html"),
+	)
 }

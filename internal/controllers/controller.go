@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log/slog"
 	"net/http"
 	"path/filepath"
@@ -19,7 +20,7 @@ type Controller struct {
 	controller controllerFunc
 }
 
-func newController(layouts *template.Template, name string, files []string, controller controllerFunc) *Controller {
+func newController(layouts *template.Template, name string, files []string, controller controllerFunc, templateFS fs.FS) *Controller {
 	layouts, err := layouts.Clone()
 
 	c := &Controller{
@@ -39,7 +40,7 @@ func newController(layouts *template.Template, name string, files []string, cont
 	}
 
 	if len(fns) > 0 {
-		_, err = c.layouts.ParseFiles(fns...)
+		_, err = c.layouts.ParseFS(templateFS, fns...)
 
 		if err != nil {
 			c.throwInternalServerError("Failed to parse template files", err)
