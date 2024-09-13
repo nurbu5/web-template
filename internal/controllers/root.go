@@ -18,5 +18,5 @@ func Root() http.HandlerFunc {
 		"controllers.Root",
 		views.RootView,
 		c,
-	).handler
+	).handler()
 }

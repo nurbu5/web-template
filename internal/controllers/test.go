@@ -22,5 +22,5 @@ func Test() http.HandlerFunc {
 		"controllers.Test",
 		views.TestView,
 		c,
-	).handler
+	).handler()
 }
