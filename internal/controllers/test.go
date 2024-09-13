@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"html/template"
-	"io/fs"
 	"net/http"
+
+	"github.com/nurbu5/web-template/internal/views"
 )
 
 type testData struct {
@@ -11,18 +11,16 @@ type testData struct {
 }
 
 // Path: /test
-func Test(layouts *template.Template, templateFS fs.FS) http.HandlerFunc {
-	c := func(layouts *template.Template) http.HandlerFunc {
+func Test() http.HandlerFunc {
+	c := func(v *views.View) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
-			layouts.Execute(w, testData{"TESTER'S"})
+			v.Execute(w, testData{"TESTER'S"})
 		}
 	}
 
 	return newController(
-		layouts.Lookup("base.html"),
-		"Root",
-		[]string{"test.html"},
+		"controllers.Test",
+		views.TestView,
 		c,
-		templateFS,
 	).handler
 }

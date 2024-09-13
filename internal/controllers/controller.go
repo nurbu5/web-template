@@ -3,55 +3,37 @@ package controllers
 import (
 	"context"
 	"fmt"
-	"html/template"
-	"io/fs"
 	"log/slog"
 	"net/http"
-	"path/filepath"
 
 	"github.com/nurbu5/web-template/internal/views"
 )
 
-type controllerFunc func(layouts *template.Template) http.HandlerFunc
+type controllerFunc func(v *views.View) http.HandlerFunc
 
 type Controller struct {
-	layouts    *template.Template
-	name       string
-	controller controllerFunc
+	name    string
+	view    *views.View
+	control controllerFunc
 }
 
-func newController(layouts *template.Template, name string, files []string, controller controllerFunc, templateFS fs.FS) *Controller {
-	layouts, err := layouts.Clone()
-
-	c := &Controller{
-		layouts:    layouts,
-		name:       name,
-		controller: controller,
+func newController(n string, vp views.ViewProducer, c controllerFunc) *Controller {
+	v, err := vp()
+	out := &Controller{
+		name:    n,
+		view:    v,
+		control: c,
 	}
 
 	if err != nil {
-		c.throwInternalServerError("Failed to parse layout files", err)
+		out.throwInternalServerError("controllers.newController", err)
 	}
 
-	fns := make([]string, len(files))
-	for i, file := range files {
-		fn := filepath.Join(views.TemplateDirectory, file)
-		fns[i] = fn
-	}
-
-	if len(fns) > 0 {
-		_, err = c.layouts.ParseFS(templateFS, fns...)
-
-		if err != nil {
-			c.throwInternalServerError("Failed to parse template files", err)
-		}
-	}
-
-	return c
+	return out
 }
 
 func (c *Controller) handler(w http.ResponseWriter, r *http.Request) {
-	c.controller(c.layouts)(w, r)
+	c.control(c.view)(w, r)
 }
 
 func (c *Controller) throwInternalServerError(message string, err error) {
@@ -60,7 +42,7 @@ func (c *Controller) throwInternalServerError(message string, err error) {
 	slog.ErrorContext(ctx, message, slog.Any("err", err))
 	slog.Error("controllers.Root", slog.Any("err", err))
 
-	c.controller = func(_ *template.Template) http.HandlerFunc {
+	c.control = func(_ *views.View) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
