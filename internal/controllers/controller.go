@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/NYTimes/gziphandler"
 	"github.com/nurbu5/web-template/internal/views"
 )
 
@@ -34,8 +33,11 @@ func newController(n string, vp views.ViewProducer, c controllerFunc) *Controlle
 }
 
 func (c *Controller) handler() http.HandlerFunc {
-	// You can add calls to middleware here
-	return gziphandler.GzipHandler(c.control(c.view)).ServeHTTP
+	out := http.Handler(c.control(c.view))
+	for _, m := range middlewareList() {
+		out = m(out)
+	}
+	return out.ServeHTTP
 }
 
 func (c *Controller) throwInternalServerError(message string, err error) {
