@@ -1,2 +1,37 @@
+# binary name
 web-template
+
+# Node modules directory
+node_modules/
+
+# Build and distribution directories
+dist/
+build/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Coverage directory
+coverage/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
 tmp/
+temp/
+
+# Compiled files
+*.out
+*.class
