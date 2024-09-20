@@ -78,7 +78,7 @@ run: build
 run/live:
 	go run github.com/cosmtrek/air@v1.43.0 \
 		--build.cmd "make build" --build.bin "/tmp/bin/${binary_name}" --build.delay "100" \
-		--build.exclude_dir "internal/views/web/assets/dist" \
+		--build.exclude_dir "internal/views/web/assets/dist,internal/views/web/assets/node_modules" \
 		--build.include_ext "go, tpl, tmpl, html, css, scss, js, ts, sql, jpeg, jpg, gif, png, bmp, svg, webp, ico" \
 		--misc.clean_on_exit "true"
 
