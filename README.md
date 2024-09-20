@@ -4,10 +4,11 @@
 - npm
 
 ## Setup:
-- Run `make setup`
+- Run `make development/setup`
 
 ## Build:
 - Run `make build`
+NOTE: Builds are stored in `/tmp/bin`
 
 ## Run:
 - Run `make run`
