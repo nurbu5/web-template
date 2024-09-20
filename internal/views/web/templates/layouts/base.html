@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="/static/css/style.css">
-  <script src="/static/js/app.js"></script>
+  <link rel="stylesheet" href="{{ .Config.CSSFileName }}">
+  <script src="{{ .Config.JSFileName }}"></script>
   <title>{{ template "title" . }}</title>
 </head>
 

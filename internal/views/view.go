@@ -22,6 +22,11 @@ type View struct {
 	template *template.Template
 }
 
+type ViewData struct {
+	Config *LayoutConfig
+	Data   interface{}
+}
+
 func newView(name, layout string, files []string) (*View, error) {
 	l, err := layouts.Clone()
 
@@ -52,5 +57,5 @@ func newView(name, layout string, files []string) (*View, error) {
 
 func (v *View) Execute(w http.ResponseWriter, data interface{}) error {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	return v.template.Lookup(v.layout).Execute(w, data)
+	return v.template.Lookup(v.layout).Execute(w, ViewData{Config: manifest, Data: data})
 }

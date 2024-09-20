@@ -2,15 +2,15 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin'); // Import the plugin
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 module.exports = {
   mode: 'production',
   entry: './src/js/app.js',
   output: {
-    // TODO: Add a hash to the filename
-    // filename: 'js/bundle.[contenthash].js',  // Output JS to dist/js
-    filename: 'js/bundle.js',
     path: path.resolve(__dirname, 'dist'),   // Output directory
+    filename: 'js/bundle.[contenthash].js',  // Output JS to dist/js
+    publicPath: '/static/', // Ensure Webpack understands the path where the assets will be served
   },
   module: {
     rules: [
@@ -27,9 +27,11 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),  // Clean the output directory
     new MiniCssExtractPlugin({
-      // TODO: Add a hash to the filename
-      // filename: 'css/style.[contenthash].css',  // Extract CSS to dist/css
-      filename: 'css/style.css',
+      filename: 'css/style.[contenthash].css',  // Extract CSS to dist/css
+    }),
+    new WebpackAssetsManifest({
+      output: 'manifest.json', // Output manifest file
+      publicPath: true, // Include the public path in the manifest
     }),
   ],
   optimization: {
@@ -39,5 +41,6 @@ module.exports = {
       new CssMinimizerPlugin(),  // Add this for CSS minification
     ],
   },
+  mode: 'production',
 };
 
